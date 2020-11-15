@@ -13,6 +13,7 @@ void Background::bgSprite()
 {
 	/*set texture to sprite*/
 	this->bgsprite.setTexture(this->bgtexture);
+	this->bgsprite.setPosition(sf::Vector2f(0.0f, 0.0f));
 }
 
 Background::Background()

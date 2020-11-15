@@ -7,10 +7,20 @@ Player::Player(sf::Texture* &texture, sf::Vector2u imageCount, float switchTime,
 	row = 0;
 	faceRight = true;
 
-	body.setSize(sf::Vector2f(140.0f, 140.0f));
+	body.setSize(sf::Vector2f(150.0f, 150.0f));
+	body.setOrigin(body.getSize()/2.0f);
+	body.setPosition(sf::Vector2f(1800.0f, 2200.0f));
+	//printf("%.2f", body.getSize().x);
+	this->clock = new sf::Clock;
+	this->time = new sf::Time;
+
+	
+	//body.setOrigin(sf::Vector2f(-250.0f, -450.0f));
+
 	body.setTexture(texture);
 	
 }
+
 
 Player:: ~Player()
 {
@@ -21,6 +31,9 @@ Player:: ~Player()
 void Player::update(float deltatime)
 {
 	sf::Vector2f movement(0.0f, 0.0f);
+	this->time = &this->clock->getElapsedTime();
+	this->showtime = this->time->asSeconds();
+	//printf("%llu\n", this->showtime);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		movement.x -= movementSpeed * deltatime;
@@ -30,6 +43,16 @@ void Player::update(float deltatime)
 		movement.y -= movementSpeed * deltatime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		movement.y += movementSpeed * deltatime;
+
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		movement.x -= 130 * deltatime;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		movement.x += 130 * deltatime;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		movement.y -= 130 * deltatime;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		movement.y += 130 * deltatime;
 
 	if (movement.x == 0.0f) {
 		row = 0;

@@ -17,11 +17,37 @@ void Game::initialPlayer()
 	this->clock = new sf::Clock;
 }
 
-/* --- SKY BACKGROUND ---*/
+void Game::initialView()
+{
+	this->view = new sf::View(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(1920.0f, 1080.0f));
+
+}
 
 void Game::initialBackground()
 {
 	this->background = new Background;
+}
+
+void Game::initialTime()
+{
+	this->time = new sf::Time;
+	this->clocktime = new sf::Clock;
+}
+
+void Game::initialFont()
+{
+	this->font = new sf::Font;
+	if(!this->font->loadFromFile("Cloud.ttf")){
+		printf("Load font fail\n");
+	}
+}
+
+void Game::initialPlaytime()
+{
+	this->playTime = new sf::Text("test",*this->font,60);
+	this->playTime->setPosition(sf::Vector2f(0.0f,0.0f));
+	this->playTime->setCharacterSize(40);
+	this->playTime->setFont(*this->font);
 }
 
 
@@ -30,6 +56,11 @@ Game::Game(){
 	this->initialWindow();
 	this->initialPlayer();
 	this->initialBackground();
+	this->initialView();
+	this->initialTime();
+	this->initialFont();
+	this->initialPlaytime();
+	
 }
 
 Game::~Game()
@@ -66,12 +97,20 @@ void Game::update()
 	this->updatePollEvents();
 	deltaTime = this->clock->restart().asSeconds();
 	this->player->update(deltaTime);
+	this->view->setCenter(this->player->GetPosition());
+	this->time = &this->clocktime->getElapsedTime();
+	this->showtime = this->time->asSeconds();
+	this->playTime->setString("Time : "+std::to_string(this->showtime)+"s");
+	this->playTime->setPosition(sf::Vector2f(this->player->GetPosition().x-930.0f, this->player->GetPosition().y-520.0f));
 }
 void Game::render()
 {
 	this->window->clear();
+	this->window->setView(*this->view);
+	
 	this->background->render(*this->window);
 	/*display*/
+	this->window->draw(*this->playTime);
 	this->player->render(*this->window);
 	this->window->display();
 }
