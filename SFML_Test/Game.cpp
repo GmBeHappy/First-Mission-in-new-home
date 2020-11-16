@@ -24,8 +24,10 @@ void Game::initialView()
 }
 
 void Game::initialBackground()
-{
-	this->background = new Background;
+{	
+	this->gameBackgroung = new sf::Texture;
+	this->gameBackgroung->loadFromFile("Textures/bg.jpg");
+	this->background = new Background(this->gameBackgroung);
 }
 
 void Game::initialTime()

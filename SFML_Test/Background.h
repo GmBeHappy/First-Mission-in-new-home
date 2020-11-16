@@ -9,11 +9,9 @@ private:
 	sf::Texture bgtexture;
 
 	/*private function*/
-	void bgTexture();
-	void bgSprite();
 
 public:
-	Background();
+	Background(sf::Texture* &texture);
 	virtual ~Background();
 
 	/*FUNCTIONS*/

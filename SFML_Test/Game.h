@@ -8,6 +8,9 @@ class Game
 private:
 	sf::RenderWindow* window;
 	sf::Texture* playerTexture;
+	sf::Texture* gameBackgroung;
+	sf::Texture* menuBackgroung;
+
 	sf::View* view;
 	sf::Font* font;
 	sf::Text* playTime;
