@@ -46,10 +46,21 @@ void Game::initialFont()
 
 void Game::initialPlaytime()
 {
-	this->playTime = new sf::Text("test",*this->font,60);
+	this->playTime = new sf::Text();
 	this->playTime->setPosition(sf::Vector2f(0.0f,0.0f));
 	this->playTime->setCharacterSize(40);
 	this->playTime->setFont(*this->font);
+}
+
+void Game::initialMainMenu()
+{
+	this->mainMenu = new MainMenu(this->window,this->mouse);
+	
+}
+
+void Game::initialMouse()
+{
+	this->mouse = new sf::Mouse();
 }
 
 
@@ -62,6 +73,8 @@ Game::Game(){
 	this->initialTime();
 	this->initialFont();
 	this->initialPlaytime();
+	this->initialMainMenu();
+	this->initialMouse();
 	
 }
 
@@ -93,10 +106,16 @@ void Game::updatePollEvents()
 	}
 }
 
+void Game::updateMousePosition()
+{
+	
+}
+
 
 void Game::update()
 {	
 	this->updatePollEvents();
+	this->mainMenu->update();
 	deltaTime = this->clock->restart().asSeconds();
 	this->player->update(deltaTime);
 	this->view->setCenter(this->player->GetPosition());
@@ -108,11 +127,15 @@ void Game::update()
 void Game::render()
 {
 	this->window->clear();
-	this->window->setView(*this->view);
 	
-	this->background->render(*this->window);
-	/*display*/
-	this->window->draw(*this->playTime);
-	this->player->render(*this->window);
+	if (this->mainMenu->isPlay) {
+		this->window->setView(*this->view);
+		this->background->render(*this->window);
+		this->window->draw(*this->playTime);
+		this->player->render(*this->window);
+	}
+	else {
+		this->mainMenu->render();
+	}
 	this->window->display();
 }

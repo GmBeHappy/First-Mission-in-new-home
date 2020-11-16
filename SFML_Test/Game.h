@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 #include "Background.h"
+#include"MainMenu.h"
 #include <iostream>
 
 class Game
@@ -9,7 +10,6 @@ private:
 	sf::RenderWindow* window;
 	sf::Texture* playerTexture;
 	sf::Texture* gameBackgroung;
-	sf::Texture* menuBackgroung;
 
 	sf::View* view;
 	sf::Font* font;
@@ -22,6 +22,14 @@ private:
 	Background* background;
 	sf::Time* time;
 	unsigned long long showtime;
+	MainMenu* mainMenu;
+
+	sf::Mouse* mouse;
+
+	sf::Vector2i mousePosScreen;
+	sf::Vector2i mousePosWindow;
+	sf::Vector2f mousePosView;
+
 	//float showtime;
 
 	void initialWindow();
@@ -31,6 +39,8 @@ private:
 	void initialTime();
 	void initialFont();
 	void initialPlaytime();
+	void initialMainMenu();
+	void initialMouse();
 
 public:
 	Game();
@@ -40,6 +50,7 @@ public:
 	void run();
 	void updatePollEvents();
 	void updateInput();
+	void updateMousePosition();
 
 	void update();
 	void render();
