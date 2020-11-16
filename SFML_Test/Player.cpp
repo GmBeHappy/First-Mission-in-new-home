@@ -35,24 +35,50 @@ void Player::update(float deltatime)
 	this->showtime = this->time->asSeconds();
 	//printf("%llu\n", this->showtime);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		movement.x -= movementSpeed * deltatime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		movement.x += movementSpeed * deltatime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		movement.y -= movementSpeed * deltatime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		movement.y += movementSpeed * deltatime;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		if (body.getPosition().x > 0) {
+			movement.x -= movementSpeed * deltatime;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		if (body.getPosition().x < 7521) {
+			movement.x += movementSpeed * deltatime;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+		if (body.getPosition().y > 0) {
+			movement.y -= movementSpeed * deltatime;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+		if (body.getPosition().y < 4234) {
+			movement.y += movementSpeed * deltatime;
+		}
+	}
 
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-		movement.x -= 130 * deltatime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-		movement.x += 130 * deltatime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-		movement.y -= 130 * deltatime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-		movement.y += 130 * deltatime;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+		if (body.getPosition().x > 0) {
+			movement.x -= 130 * deltatime;
+		}
+	}
+		
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+		if (body.getPosition().x < 7521) {
+			movement.x += 130 * deltatime;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+		if (body.getPosition().y > 0) {
+			movement.y -= 130 * deltatime;
+		}
+	}
+		
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+		if (body.getPosition().y < 4234) {
+			movement.y += 130 * deltatime;
+		}
+	}
 
 	if (movement.x == 0.0f) {
 		row = 0;
