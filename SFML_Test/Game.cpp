@@ -13,7 +13,7 @@ void Game::initialPlayer()
 {
 	this->playerTexture = new sf::Texture;
 	this->playerTexture->loadFromFile("Textures/player.png");
-	this->player = new Player(this->playerTexture, sf::Vector2u(5, 5), 0.3f, 100.0f);
+	this->player = new Player(this->window,this->playerTexture, sf::Vector2u(5, 5), 0.3f, 100.0f,this->mouse);
 	this->clock = new sf::Clock;
 }
 
@@ -62,6 +62,8 @@ void Game::initialMouse()
 {
 	this->mouse = new sf::Mouse();
 }
+
+
 
 
 /*GAME WINDOW*/
@@ -114,6 +116,7 @@ void Game::updateMousePosition()
 
 void Game::update()
 {	
+	
 	this->updatePollEvents();
 	this->mainMenu->update();
 	deltaTime = this->clock->restart().asSeconds();

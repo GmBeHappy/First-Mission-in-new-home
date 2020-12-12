@@ -1,6 +1,12 @@
 #include "Player.h"
 
-Player::Player(sf::Texture* &texture, sf::Vector2u imageCount, float switchTime, float speed) :
+void Player::initialBulletTexture()
+{
+	
+}
+
+
+Player::Player(sf::RenderWindow* window,sf::Texture* &texture, sf::Vector2u imageCount, float switchTime, float speed, sf::Mouse* mouse): 
 	animation(texture, imageCount, switchTime)
 {
 	this->movementSpeed = speed;
@@ -9,12 +15,16 @@ Player::Player(sf::Texture* &texture, sf::Vector2u imageCount, float switchTime,
 
 	body.setSize(sf::Vector2f(150.0f, 150.0f));
 	body.setOrigin(body.getSize()/2.0f);
-	body.setPosition(sf::Vector2f(1800.0f, 2200.0f));
-	//printf("%.2f", body.getSize().x);
+	body.setPosition(this->spawnPoint);
+	body.setFillColor(sf::Color::Red);
+	
 	this->clock = new sf::Clock;
 	this->time = new sf::Time;
 
+	this->initialBulletTexture();
 	
+	this->window = window;
+	this->mouse = mouse;
 	//body.setOrigin(sf::Vector2f(-250.0f, -450.0f));
 
 	body.setTexture(texture);
@@ -33,6 +43,7 @@ void Player::update(float deltatime)
 	sf::Vector2f movement(0.0f, 0.0f);
 	this->time = &this->clock->getElapsedTime();
 	this->showtime = this->time->asSeconds();
+	
 	//printf("%llu\n", this->showtime);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
@@ -80,6 +91,11 @@ void Player::update(float deltatime)
 		}
 	}
 
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		
+		
+	}
+
 	if (movement.x == 0.0f) {
 		row = 0;
 	}
@@ -100,4 +116,5 @@ void Player::update(float deltatime)
 void Player::render(sf::RenderTarget& target)
 {
 	target.draw(body);
+	
 }

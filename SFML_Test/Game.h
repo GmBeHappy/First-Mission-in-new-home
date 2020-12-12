@@ -9,6 +9,7 @@ class Game
 private:
 	sf::RenderWindow* window;
 	sf::Texture* playerTexture;
+	
 	sf::Texture* gameBackgroung;
 
 	sf::View* view;
@@ -26,9 +27,7 @@ private:
 
 	sf::Mouse* mouse;
 
-	sf::Vector2i mousePosScreen;
-	sf::Vector2i mousePosWindow;
-	sf::Vector2f mousePosView;
+	
 
 	//float showtime;
 
@@ -41,6 +40,7 @@ private:
 	void initialPlaytime();
 	void initialMainMenu();
 	void initialMouse();
+	void initialBulletTexture();
 
 public:
 	Game();
