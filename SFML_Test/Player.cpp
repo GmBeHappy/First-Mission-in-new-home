@@ -5,6 +5,17 @@ void Player::initialBulletTexture()
 	
 }
 
+void Player::initObject()
+{
+	this->body.setOutlineColor(sf::Color::Green);
+	this->body.setOutlineThickness(2.0f);
+	this->spaceship.setSize(sf::Vector2f(245.0f, 255.0f));
+	this->spaceship.setOutlineColor(sf::Color::Green);
+	this->spaceship.setFillColor(sf::Color::Transparent);
+	this->spaceship.setOutlineThickness(2.0f);
+	this->spaceship.setPosition(sf::Vector2f(1490.0f, 2100.0f));
+}
+
 
 Player::Player(sf::RenderWindow* window,sf::Texture* &texture, sf::Vector2u imageCount, float switchTime, float speed, sf::Mouse* mouse): 
 	animation(texture, imageCount, switchTime)
@@ -22,6 +33,7 @@ Player::Player(sf::RenderWindow* window,sf::Texture* &texture, sf::Vector2u imag
 	this->time = new sf::Time;
 
 	this->initialBulletTexture();
+	this->initObject();
 	
 	this->window = window;
 	this->mouse = mouse;
@@ -45,49 +57,51 @@ void Player::update(float deltatime)
 	this->showtime = this->time->asSeconds();
 	
 	//printf("%llu\n", this->showtime);
+	if (!body.getGlobalBounds().intersects(this->spaceship.getGlobalBounds())) {
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-		if (body.getPosition().x > 0) {
-			movement.x -= movementSpeed * deltatime;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			if (body.getPosition().x > 0) {
+				movement.x -= movementSpeed * deltatime;
+			}
 		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		if (body.getPosition().x < 7521) {
-			movement.x += movementSpeed * deltatime;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			if (body.getPosition().x < 7521) {
+				movement.x += movementSpeed * deltatime;
+			}
 		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-		if (body.getPosition().y > 0) {
-			movement.y -= movementSpeed * deltatime;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			if (body.getPosition().y > 0) {
+				movement.y -= movementSpeed * deltatime;
+			}
 		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-		if (body.getPosition().y < 4234) {
-			movement.y += movementSpeed * deltatime;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			if (body.getPosition().y < 4234) {
+				movement.y += movementSpeed * deltatime;
+			}
 		}
-	}
 
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
-		if (body.getPosition().x > 0) {
-			movement.x -= 130 * deltatime;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+			if (body.getPosition().x > 0) {
+				movement.x -= 130 * deltatime;
+			}
 		}
-	}
-		
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
-		if (body.getPosition().x < 7521) {
-			movement.x += 130 * deltatime;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+			if (body.getPosition().x < 7521) {
+				movement.x += 130 * deltatime;
+			}
 		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
-		if (body.getPosition().y > 0) {
-			movement.y -= 130 * deltatime;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+			if (body.getPosition().y > 0) {
+				movement.y -= 130 * deltatime;
+			}
 		}
-	}
-		
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
-		if (body.getPosition().y < 4234) {
-			movement.y += 130 * deltatime;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+			if (body.getPosition().y < 4234) {
+				movement.y += 130 * deltatime;
+			}
 		}
 	}
 
@@ -115,6 +129,7 @@ void Player::update(float deltatime)
 
 void Player::render(sf::RenderTarget& target)
 {
+	target.draw(this->spaceship);
 	target.draw(body);
 	
 }

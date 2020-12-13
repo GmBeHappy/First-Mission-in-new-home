@@ -13,7 +13,6 @@ private:
 public:
 	Background(sf::Texture* &texture);
 	virtual ~Background();
-
 	/*FUNCTIONS*/
 
 	void update();

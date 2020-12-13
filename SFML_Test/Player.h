@@ -10,12 +10,13 @@ class Player
 {
 private:
 	sf::RectangleShape body;
+	sf::RectangleShape spaceship;
 	sf::Clock* clock;
 	sf::Time* time;
 	Animation animation;
 	Bullet* b1;
 
-	sf::Vector2f spawnPoint = { 1800.0f, 2200.0f };
+	sf::Vector2f spawnPoint = { 1850.0f, 2200.0f };
 
 	std::vector<Bullet> bullets;
 	
@@ -38,6 +39,7 @@ private:
 	float suitPower=2000;
 	/*private function*/
 	void initialBulletTexture();
+	void initObject();
 	
 
 public:
