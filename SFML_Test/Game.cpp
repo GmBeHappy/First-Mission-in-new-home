@@ -63,9 +63,6 @@ void Game::initialMouse()
 	this->mouse = new sf::Mouse();
 }
 
-
-
-
 /*GAME WINDOW*/
 Game::Game(){
 	this->initialWindow();
@@ -113,31 +110,43 @@ void Game::updateMousePosition()
 	
 }
 
+void Game::updateTimeScore()
+{
+	this->time = &this->clocktime->getElapsedTime();
+	this->showtime = this->time->asSeconds();
+	this->playTime->setString("Time : " + std::to_string(this->showtime) + "s");
+	this->playTime->setPosition(sf::Vector2f(this->player->GetPosition().x - 930.0f, this->player->GetPosition().y - 520.0f));
+}
+
+void Game::updateTime()
+{
+	deltaTime = this->clock->restart().asSeconds();
+}
+
 
 void Game::update()
 {	
 	
 	this->updatePollEvents();
+	this->updateTimeScore();
+	this->updateTime();
 	this->mainMenu->update();
-	deltaTime = this->clock->restart().asSeconds();
 	this->player->update(deltaTime);
 	this->view->setCenter(this->player->GetPosition());
-	this->time = &this->clocktime->getElapsedTime();
-	this->showtime = this->time->asSeconds();
-	this->playTime->setString("Time : "+std::to_string(this->showtime)+"s");
-	this->playTime->setPosition(sf::Vector2f(this->player->GetPosition().x-930.0f, this->player->GetPosition().y-520.0f));
+	
 }
 void Game::render()
 {
 	this->window->clear();
 	
+	// draw game
 	if (this->mainMenu->isPlay) {
 		this->window->setView(*this->view);
 		this->background->render(*this->window);
 		this->window->draw(*this->playTime);
 		this->player->render(*this->window);
 	}
-	else {
+	else { // draw main menu
 		this->mainMenu->render();
 	}
 	this->window->display();

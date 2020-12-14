@@ -209,8 +209,10 @@ void Player::update(float deltatime)
 
 void Player::render(sf::RenderTarget& target)
 {
-	target.draw(this->spaceship);
-	target.draw(this->bodyHitbox);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F3)) {
+		target.draw(this->spaceship);
+		target.draw(this->bodyHitbox);
+	}
 	target.draw(body);
 	
 }

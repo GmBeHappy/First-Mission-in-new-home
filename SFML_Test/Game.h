@@ -51,6 +51,8 @@ public:
 	void updatePollEvents();
 	void updateInput();
 	void updateMousePosition();
+	void updateTimeScore();
+	void updateTime();
 
 	void update();
 	void render();
