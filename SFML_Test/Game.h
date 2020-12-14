@@ -1,36 +1,49 @@
 #pragma once
+#include <iostream>
 #include "Player.h"
 #include "Background.h"
-#include"MainMenu.h"
-#include <iostream>
+#include "MainMenu.h"
+#include "Bullet.h"
+#include "Enemies.h"
+
 
 class Game
 {
 private:
+	// Window
 	sf::RenderWindow* window;
-	sf::Texture* playerTexture;
-	
-	sf::Texture* gameBackgroung;
 
+	// Player
+	sf::Texture* playerTexture;
+	Player* player;
+	
+	// Background
+	sf::Texture* gameBackgroung;
+	Background* background;
+
+	// View
 	sf::View* view;
+
+	// GUI
 	sf::Font* font;
 	sf::Text* playTime;
-	/*pilot*/
-	Player* player;
+
+	// Time
 	float deltaTime;
 	sf::Clock* clock;
 	sf::Clock* clocktime;
-	Background* background;
 	sf::Time* time;
 	unsigned long long showtime;
-	MainMenu* mainMenu;
 
+	// Menu
+	MainMenu* mainMenu;
 	sf::Mouse* mouse;
 
-	
+	// Bullet
+	std::vector<Bullet*> bullets;
+	sf::Texture* bulletTexture;
 
-	//float showtime;
-
+	// funtion
 	void initialWindow();
 	void initialPlayer();
 	void initialView();
@@ -50,6 +63,7 @@ public:
 	void run();
 	void updatePollEvents();
 	void updateInput();
+	void updateBullets();
 	void updateMousePosition();
 	void updateTimeScore();
 	void updateTime();

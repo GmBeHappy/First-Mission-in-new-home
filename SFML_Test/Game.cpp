@@ -8,7 +8,6 @@ void Game::initialWindow()
 	this->window->setVerticalSyncEnabled(false);
 }
 
-// player
 void Game::initialPlayer()
 {
 	this->playerTexture = new sf::Texture;
@@ -63,6 +62,12 @@ void Game::initialMouse()
 	this->mouse = new sf::Mouse();
 }
 
+void Game::initialBulletTexture()
+{
+	this->bulletTexture = new sf::Texture;
+	this->bulletTexture->loadFromFile("Textures/bullet.png");
+}
+
 /*GAME WINDOW*/
 Game::Game(){
 	this->initialWindow();
@@ -74,7 +79,7 @@ Game::Game(){
 	this->initialPlaytime();
 	this->initialMainMenu();
 	this->initialMouse();
-	
+	this->initialBulletTexture();
 }
 
 Game::~Game()
@@ -102,6 +107,37 @@ void Game::updatePollEvents()
 			this->window->close();
 		if (event.Event::KeyPressed && event.Event::key.code == sf::Keyboard::Escape)
 			this->window->close();
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) ) //press Attack = attack; && this->player->canAttack()
+		{
+			this->bullets.push_back(
+				new Bullet(
+					this->bulletTexture,
+					this->player->getPos().x + this->player->getBounds().height / 2.f,
+					this->player->getPos().y + this->player->getBounds().height / 2.f, 1.f, 0.f, 35.f)
+			);
+			printf("Shooted\n");
+		}
+	}
+}
+
+void Game::updateBullets()
+{
+	unsigned counter = 0;
+	for (auto* bullet : this->bullets)
+	{
+		bullet->update();
+
+		// Bulet culling (top screen)
+		if (bullet->getBounds().top + bullet->getBounds().height < 0.f)
+		{
+			// delete bullet
+			delete this->bullets.at(counter);
+			this->bullets.erase(this->bullets.begin() + counter);
+			--counter;
+		}
+
+		++counter;
 	}
 }
 
@@ -123,7 +159,6 @@ void Game::updateTime()
 	deltaTime = this->clock->restart().asSeconds();
 }
 
-
 void Game::update()
 {	
 	
@@ -133,6 +168,7 @@ void Game::update()
 	this->mainMenu->update();
 	this->player->update(deltaTime);
 	this->view->setCenter(this->player->GetPosition());
+	this->updateBullets();
 	
 }
 void Game::render()
@@ -145,6 +181,10 @@ void Game::render()
 		this->background->render(*this->window);
 		this->window->draw(*this->playTime);
 		this->player->render(*this->window);
+		for (auto* bullet : this->bullets)		// bullets
+		{
+			bullet->render(*this->window);
+		}
 	}
 	else { // draw main menu
 		this->mainMenu->render();

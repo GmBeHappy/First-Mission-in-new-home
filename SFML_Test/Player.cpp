@@ -202,7 +202,7 @@ void Player::update(float deltatime)
 	this->updateHitbox();
 
 	// simple collision check
-	if (!body.getGlobalBounds().intersects(this->spaceship.getGlobalBounds())) {
+	if (body.getGlobalBounds().intersects(this->spaceship.getGlobalBounds())) {
 		printf("Collision!!\n");
 	}
 }

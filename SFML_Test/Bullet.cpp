@@ -26,7 +26,7 @@ void Bullet::update()
 	this->shape.move(this->movementSpeed * this->direction);
 }
 
-void Bullet::render(sf::RenderTarget* target)
+void Bullet::render(sf::RenderTarget& target)
 {
-	target->draw(this->shape);
+	target.draw(this->shape);
 }
