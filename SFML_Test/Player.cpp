@@ -17,7 +17,7 @@ void Player::initialVariables()
 {
 	
 	// attack per time
-	this->attackCooldownMax = 10.f;
+	this->attackCooldownMax = 5.f;
 	this->attackCooldown = this->attackCooldownMax;
 
 	// HP
@@ -82,10 +82,16 @@ void Player::updateMovement(float deltatime)
 	}
 
 	// animation
-	if (movement.x == 0.0f) { // IDLE
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		this->animation.updateSwitchTime(0.1f);
+		row = 3;
+	}
+	else if (movement.x == 0.0f) { // IDLE
+		this->animation.updateSwitchTime(0.3f);
 		row = 0;
 	}
 	else { // walking ar running
+		this->animation.updateSwitchTime(0.3f);
 		row = 1;
 		if (movement.x > 0.0f) {
 			faceRight = true;  // face right
@@ -117,6 +123,7 @@ Player::Player(sf::RenderWindow* window,sf::Texture* &texture, sf::Vector2u imag
 	
 	this->initObject();
 	this->initialBodyHitbox();
+	this->initialVariables();
 	
 	this->window = window;
 	this->mouse = mouse;
@@ -181,18 +188,42 @@ const bool Player::canAttack()
 {
 	if (this->attackCooldown >= this->attackCooldownMax)
 	{
-		this->attackCooldown = 0.f;
 		return true;
 	}
 	return false;
 }
 
+void Player::finishAttack()
+{
+	attackCooldown = 0;
+}
+
 void Player::updateAttack()
 {
-	if (this->attackCooldown < this->attackCooldownMax)
+	if (this->attackCooldown < this->attackCooldownMax && attackCooldown != 0)
 	{
 		this->attackCooldown += 0.25f;
 	}
+	if (this->attackCooldown >= this->attackCooldownMax) {
+		this->attackCooldown = this->attackCooldownMax;
+	}
+}
+
+void Player::reloadCooldown()
+{
+	this->attackCooldown += 0.25f;
+}
+
+void Player::isFinishAttack()
+{
+	if (this->animation.imageCountt >= 4) {
+		this->reloadCooldown();
+	}
+}
+
+const bool Player::getFaceRight()
+{
+	return this->faceRight;
 }
 
 void Player::update(float deltatime)
@@ -200,6 +231,7 @@ void Player::update(float deltatime)
 	this->updateMovement(deltatime);
 	this->updateAttack();
 	this->updateHitbox();
+	this->isFinishAttack();
 
 	// simple collision check
 	if (body.getGlobalBounds().intersects(this->spaceship.getGlobalBounds())) {

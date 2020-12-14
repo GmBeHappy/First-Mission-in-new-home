@@ -108,15 +108,28 @@ void Game::updatePollEvents()
 		if (event.Event::KeyPressed && event.Event::key.code == sf::Keyboard::Escape)
 			this->window->close();
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) ) //press Attack = attack; && this->player->canAttack()
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->player->canAttack() ) //press Attack = attack; 
 		{
-			this->bullets.push_back(
-				new Bullet(
-					this->bulletTexture,
-					this->player->getPos().x + this->player->getBounds().height / 2.f,
-					this->player->getPos().y + this->player->getBounds().height / 2.f, 1.f, 0.f, 35.f)
-			);
+			if (this->player->getFaceRight()) {
+				this->bullets.push_back(
+					new Bullet(
+						this->bulletTexture,
+						this->player->getPos().x + this->player->getBounds().height / 2.f,
+						this->player->getPos().y - 5.0f, 1.f, 0.f, 35.f)
+				);
+			}
+			else {
+				this->bullets.push_back(
+					new Bullet(
+						this->bulletTexture,
+						this->player->getPos().x - this->player->getBounds().height / 2.f,
+						this->player->getPos().y - 5.0f, -1.f, 0.f, 35.f)
+				);
+			}
+			
+			this->player->finishAttack();
 			printf("Shooted\n");
+			
 		}
 	}
 }

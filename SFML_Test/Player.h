@@ -66,7 +66,11 @@ public:
 
 	// attack
 	const bool canAttack();
+	void finishAttack();
 	void updateAttack();
+	void reloadCooldown();
+	void isFinishAttack();
+	const bool getFaceRight();
 	
 	// update and render
 	void update(float deltatime);
