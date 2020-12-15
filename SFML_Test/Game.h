@@ -32,6 +32,10 @@ private:
 	sf::Font* font;
 	sf::Text* playTime;
 	sf::Text* playerScore;
+	sf::Text* ending;
+	sf::Text* restart;
+	sf::Text* backToMenu;
+	sf::RectangleShape endingPlan;
 
 	// Time
 	float deltaTime;
@@ -43,6 +47,7 @@ private:
 	// Menu
 	MainMenu* mainMenu;
 	sf::Mouse* mouse;
+	bool isEnding = false;
 
 	// SCORE
 	int points;
@@ -88,6 +93,8 @@ public:
 	void updateEnemies();
 	void updateCombat();
 	void updateGUI();
+	void updateEndGame();
+	void updateEnding();
 
 	void update();
 	void render();

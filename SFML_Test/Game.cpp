@@ -64,8 +64,30 @@ void Game::initialGUI()
 	this->playerHpBar.setOutlineColor(sf::Color::Black);
 	this->playerHpBar.setOutlineThickness(2.f);
 
+	this->endingPlan.setSize(sf::Vector2f(700.0f, 800.0f));
+	this->endingPlan.setFillColor(sf::Color(25, 25, 25, 200));
+
 	this->playerHpBarBack = this->playerHpBar;
 	this->playerHpBarBack.setFillColor(sf::Color(25, 25, 25, 200));
+
+	this->ending = new sf::Text();
+	this->ending->setPosition(sf::Vector2f(0.0f, 0.0f));
+	this->ending->setFillColor(sf::Color::Red);
+	this->ending->setCharacterSize(80);
+	this->ending->setFont(*this->font);
+	this->ending->setString("GAME OVER");
+
+	this->restart = new sf::Text();
+	this->restart->setPosition(sf::Vector2f(0.0f, 0.0f));
+	this->restart->setCharacterSize(60);
+	this->restart->setFont(*this->font);
+	this->restart->setString("restart");
+
+	this->backToMenu = new sf::Text();
+	this->backToMenu->setPosition(sf::Vector2f(0.0f, 0.0f));
+	this->backToMenu->setCharacterSize(60);
+	this->backToMenu->setFont(*this->font);
+	this->backToMenu->setString("Back to Menu");
 }
 
 void Game::initialMainMenu()
@@ -307,13 +329,52 @@ void Game::updateGUI()
 
 	this->playerHpBar.setPosition(sf::Vector2f(this->player->GetPosition().x + 400.0f, this->player->GetPosition().y - 500.0f));
 	this->playerHpBarBack.setPosition(sf::Vector2f(this->player->GetPosition().x + 400.0f, this->player->GetPosition().y - 500.0f));
+	
+	this->ending->setPosition(sf::Vector2f(this->player->GetPosition().x - 200.0f, this->player->GetPosition().y - 300.0f));
+
+	this->endingPlan.setPosition(sf::Vector2f(this->player->GetPosition().x -330.0f, this->player->GetPosition().y - 400.0f));
+
+	this->restart->setPosition(sf::Vector2f(this->player->GetPosition().x - 70.0f, this->player->GetPosition().y + 100.0f));
+
+	this->backToMenu->setPosition(sf::Vector2f(this->player->GetPosition().x - 150.0f, this->player->GetPosition().y + 200.0f));
+}
+
+void Game::updateEndGame()
+{
+	if (this->player->getHp() == 0) {
+		this->isEnding = true;
+	}
+	else {
+		this->isEnding = false;
+	}
+}
+
+void Game::updateEnding()
+{
+	std::cout << "mouse X : ";
+	std::cout << this->mouse->getPosition(*this->window).x;
+	std::cout << "\t Y : ";
+	std::cout << this->mouse->getPosition(*this->window).y;
+	std::cout << "\n";
+	std::cout << "bound X : ";
+	std::cout << this->restart->getGlobalBounds().width;
+	std::cout << "\t Y : ";
+	std::cout << this->restart->getGlobalBounds().height;
+	std::cout << "\n";
+	if (this->restart->getGlobalBounds().contains(this->mouse->getPosition(*this->window).x , this->mouse->getPosition(*this->window).y)) {
+		this->restart->setCharacterSize(70);
+		if (this->mouse->isButtonPressed(this->mouse->Left)) {
+			std::cout << "restart\n";
+		}
+	}
+
 }
 
 void Game::update()
 {	
 	
 	this->updatePollEvents();
-	if (this->mainMenu->isPlay) {
+	if (this->mainMenu->isPlay && !this->isEnding) {
 		this->player->update(deltaTime);
 		this->view->setCenter(this->player->GetPosition());
 		this->updateBullets();
@@ -322,6 +383,10 @@ void Game::update()
 		this->updateTime();
 		this->updateCombat();
 		this->updateGUI();
+		this->updateEndGame();
+	}
+	else  if (this->isEnding) {
+		this->updateEnding();
 	}
 	else {
 		this->mainMenu->update();
@@ -334,7 +399,7 @@ void Game::render()
 	this->window->clear();
 	
 	// draw game
-	if (this->mainMenu->isPlay) {
+	if (this->mainMenu->isPlay && !this->isEnding) {
 		this->window->setView(*this->view);
 		this->background->render(*this->window);
 		this->window->draw(*this->playTime);
@@ -350,6 +415,27 @@ void Game::render()
 		{
 			enemie->render(*this->window);
 		}
+	}
+	else if (this->isEnding) {
+		this->window->setView(*this->view);
+		this->background->render(*this->window);
+		this->window->draw(*this->playTime);
+		this->window->draw(*this->playerScore);
+		this->player->render(*this->window);
+		this->window->draw(this->playerHpBarBack);
+		this->window->draw(this->playerHpBar);
+		for (auto* bullet : this->bullets)		// bullets
+		{
+			bullet->render(*this->window);
+		}
+		for (auto* enemie : this->enemies)		// enemies
+		{
+			enemie->render(*this->window);
+		}
+		this->window->draw(this->endingPlan);
+		this->window->draw(*this->ending);
+		this->window->draw(*this->restart);
+		this->window->draw(*this->backToMenu);
 	}
 	else { // draw main menu
 		this->mainMenu->render();
