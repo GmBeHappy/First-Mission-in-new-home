@@ -18,6 +18,8 @@ private:
 	// Player
 	sf::Texture* playerTexture;
 	Player* player;
+	sf::RectangleShape playerHpBar;			//MAX
+	sf::RectangleShape playerHpBarBack;		// 
 	
 	// Background
 	sf::Texture* gameBackgroung;
@@ -29,6 +31,7 @@ private:
 	// GUI
 	sf::Font* font;
 	sf::Text* playTime;
+	sf::Text* playerScore;
 
 	// Time
 	float deltaTime;
@@ -65,7 +68,7 @@ private:
 	void initialBackground();
 	void initialTime();
 	void initialFont();
-	void initialPlaytime();
+	void initialGUI();
 	void initialMainMenu();
 	void initialMouse();
 	void initialBulletTexture();
@@ -78,13 +81,13 @@ public:
 	/*FUNCTIONS*/
 	void run();
 	void updatePollEvents();
-	void updateInput();
 	void updateBullets();
 	void updateMousePosition();
 	void updateTimeScore();
 	void updateTime();
 	void updateEnemies();
 	void updateCombat();
+	void updateGUI();
 
 	void update();
 	void render();

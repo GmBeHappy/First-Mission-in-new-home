@@ -45,12 +45,27 @@ void Game::initialFont()
 	}
 }
 
-void Game::initialPlaytime()
+void Game::initialGUI()
 {
 	this->playTime = new sf::Text();
 	this->playTime->setPosition(sf::Vector2f(0.0f,0.0f));
 	this->playTime->setCharacterSize(40);
 	this->playTime->setFont(*this->font);
+
+	this->playerScore = new sf::Text();
+	this->playerScore->setPosition(sf::Vector2f(0.0f, 20.0f));
+	this->playerScore->setCharacterSize(40);
+	this->playerScore->setFont(*this->font);
+
+	// initial HP
+	this->playerHpBar.setSize(sf::Vector2f(500.f, 30.f));
+	this->playerHpBar.setFillColor(sf::Color::White);
+	this->playerHpBar.setPosition(sf::Vector2f(1150.f, 20.f));
+	this->playerHpBar.setOutlineColor(sf::Color::Black);
+	this->playerHpBar.setOutlineThickness(2.f);
+
+	this->playerHpBarBack = this->playerHpBar;
+	this->playerHpBarBack.setFillColor(sf::Color(25, 25, 25, 200));
 }
 
 void Game::initialMainMenu()
@@ -86,7 +101,7 @@ Game::Game(){
 	this->initialView();
 	this->initialTime();
 	this->initialFont();
-	this->initialPlaytime();
+	this->initialGUI();
 	this->initialMainMenu();
 	this->initialMouse();
 	this->initialBulletTexture();
@@ -176,6 +191,7 @@ void Game::updateTimeScore()
 	this->showtime = this->time->asSeconds();
 	this->playTime->setString("Time : " + std::to_string(this->showtime) + "s");
 	this->playTime->setPosition(sf::Vector2f(this->player->GetPosition().x - 930.0f, this->player->GetPosition().y - 520.0f));
+
 }
 
 void Game::updateTime()
@@ -190,10 +206,10 @@ void Game::updateEnemies()
 	if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
 	{
 		
-		std::cout << "enemy spawn\n";
+		//std::cout << "enemy spawn\n";
 		float enemyPosY = rand() % ((int)this->player->GetPosition().y)+600.0f;
 		float enemyPosX = rand() % ((int)this->player->GetPosition().x)+500.0f;
-		std::cout << "x : ";
+		/*std::cout << "x : ";
 		std::cout << enemyPosX;
 		std::cout << "\t";
 		std::cout << "y : ";
@@ -205,7 +221,7 @@ void Game::updateEnemies()
 		std::cout << "\t";
 		std::cout << "y : ";
 		std::cout << this->player->GetPosition().y;
-		std::cout << "\n";
+		std::cout << "\n";*/
 		this->enemies.push_back(new Enemies(enemyPosY, enemyPosY ,this->enemyTexture,sf::Vector2u(3, 4), 0.3f));
 		this->enemySpawnTimer = 0.f;
 	}
@@ -281,6 +297,18 @@ void Game::updateCombat()
 	}
 }
 
+void Game::updateGUI()
+{
+	this->playerScore->setString("Score : " + std::to_string(this->points));
+	this->playerScore->setPosition(sf::Vector2f(this->player->GetPosition().x - 930.0f, this->player->GetPosition().y - 460.0f));
+	
+	float hpPercent = static_cast<float>(this->player->getHp()) / this->player->getHpMax();
+	this->playerHpBar.setSize(sf::Vector2f(500.f * hpPercent, this->playerHpBar.getSize().y));
+
+	this->playerHpBar.setPosition(sf::Vector2f(this->player->GetPosition().x + 400.0f, this->player->GetPosition().y - 500.0f));
+	this->playerHpBarBack.setPosition(sf::Vector2f(this->player->GetPosition().x + 400.0f, this->player->GetPosition().y - 500.0f));
+}
+
 void Game::update()
 {	
 	
@@ -293,12 +321,14 @@ void Game::update()
 		this->updateTimeScore();
 		this->updateTime();
 		this->updateCombat();
+		this->updateGUI();
 	}
 	else {
 		this->mainMenu->update();
 	}
 	
 }
+
 void Game::render()
 {
 	this->window->clear();
@@ -308,7 +338,10 @@ void Game::render()
 		this->window->setView(*this->view);
 		this->background->render(*this->window);
 		this->window->draw(*this->playTime);
+		this->window->draw(*this->playerScore);
 		this->player->render(*this->window);
+		this->window->draw(this->playerHpBarBack);
+		this->window->draw(this->playerHpBar);
 		for (auto* bullet : this->bullets)		// bullets
 		{
 			bullet->render(*this->window);
