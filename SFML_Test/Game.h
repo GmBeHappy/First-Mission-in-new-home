@@ -34,6 +34,7 @@ private:
 	sf::Text* playerScore;
 	sf::Text* ending;
 	sf::Text* restart;
+	sf::RectangleShape restartHitbox;
 	sf::Text* backToMenu;
 	sf::RectangleShape endingPlan;
 
@@ -78,6 +79,8 @@ private:
 	void initialMouse();
 	void initialBulletTexture();
 	void initialEnemies();
+
+	void clearAllEnemies();
 
 public:
 	Game();

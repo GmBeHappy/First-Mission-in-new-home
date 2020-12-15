@@ -81,13 +81,18 @@ void Game::initialGUI()
 	this->restart->setPosition(sf::Vector2f(0.0f, 0.0f));
 	this->restart->setCharacterSize(60);
 	this->restart->setFont(*this->font);
-	this->restart->setString("restart");
+	this->restart->setString("press space to restart");
+
+	this->restartHitbox.setSize(sf::Vector2f(180.0f, 50.0f));
+	this->restartHitbox.setOutlineColor(sf::Color::Red);
+	this->restartHitbox.setFillColor(sf::Color::Transparent);
+	this->restartHitbox.setOutlineThickness(2.0f);
 
 	this->backToMenu = new sf::Text();
 	this->backToMenu->setPosition(sf::Vector2f(0.0f, 0.0f));
 	this->backToMenu->setCharacterSize(60);
 	this->backToMenu->setFont(*this->font);
-	this->backToMenu->setString("Back to Menu");
+	this->backToMenu->setString("press esc to exit");
 }
 
 void Game::initialMainMenu()
@@ -113,6 +118,17 @@ void Game::initialEnemies()
 	this->enemyTexture->loadFromFile("Textures/alien.png");
 	this->enemySpawnTimerMax = 50.f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
+}
+
+void Game::clearAllEnemies()
+{
+	for (auto& enem : this->enemies)
+	{
+		// delete enemies
+		delete enem;
+
+	}
+	this->enemies.clear();
 }
 
 /*GAME WINDOW*/
@@ -334,9 +350,10 @@ void Game::updateGUI()
 
 	this->endingPlan.setPosition(sf::Vector2f(this->player->GetPosition().x -330.0f, this->player->GetPosition().y - 400.0f));
 
-	this->restart->setPosition(sf::Vector2f(this->player->GetPosition().x - 70.0f, this->player->GetPosition().y + 100.0f));
+	this->restart->setPosition(sf::Vector2f(this->player->GetPosition().x - 285.0f, this->player->GetPosition().y + 100.0f));
+	this->restartHitbox.setPosition(sf::Vector2f(this->restart->getPosition().x, this->restart->getPosition().y + 10.0f));
 
-	this->backToMenu->setPosition(sf::Vector2f(this->player->GetPosition().x - 150.0f, this->player->GetPosition().y + 200.0f));
+	this->backToMenu->setPosition(sf::Vector2f(this->player->GetPosition().x - 200.0f, this->player->GetPosition().y + 200.0f));
 }
 
 void Game::updateEndGame()
@@ -350,22 +367,26 @@ void Game::updateEndGame()
 }
 
 void Game::updateEnding()
+
 {
-	std::cout << "mouse X : ";
-	std::cout << this->mouse->getPosition(*this->window).x;
-	std::cout << "\t Y : ";
-	std::cout << this->mouse->getPosition(*this->window).y;
-	std::cout << "\n";
-	std::cout << "bound X : ";
-	std::cout << this->restart->getGlobalBounds().width;
-	std::cout << "\t Y : ";
-	std::cout << this->restart->getGlobalBounds().height;
-	std::cout << "\n";
-	if (this->restart->getGlobalBounds().contains(this->mouse->getPosition(*this->window).x , this->mouse->getPosition(*this->window).y)) {
-		this->restart->setCharacterSize(70);
-		if (this->mouse->isButtonPressed(this->mouse->Left)) {
-			std::cout << "restart\n";
-		}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		this->player->reset();
+		this->points = 0;
+		this->initialTime();
+		this->isEnding = false;
+		this->clearAllEnemies();
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+		this->player->reset();
+		this->clearAllEnemies();
+		this->points = 0;
+		this->isEnding = false;
+		this->mainMenu->isPlay = false;
+		this->view->setCenter(sf::Vector2f(960.0f,540.0f));
+		this->window->setView(*this->view);
+		this->window->clear();
+		this->initialMainMenu();
+		this->initialTime();
 	}
 
 }
@@ -375,6 +396,7 @@ void Game::update()
 	
 	this->updatePollEvents();
 	if (this->mainMenu->isPlay && !this->isEnding) {
+		
 		this->player->update(deltaTime);
 		this->view->setCenter(this->player->GetPosition());
 		this->updateBullets();
@@ -389,6 +411,7 @@ void Game::update()
 		this->updateEnding();
 	}
 	else {
+		//std::cout << "ex";
 		this->mainMenu->update();
 	}
 	
@@ -436,8 +459,13 @@ void Game::render()
 		this->window->draw(*this->ending);
 		this->window->draw(*this->restart);
 		this->window->draw(*this->backToMenu);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F3)) {
+			this->window->draw(this->restartHitbox);
+		}
 	}
 	else { // draw main menu
+		//std::cout << "memu";
+		//this->window->setView(*this->view);
 		this->mainMenu->render();
 	}
 	this->window->display();

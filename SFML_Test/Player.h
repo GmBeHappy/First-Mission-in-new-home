@@ -67,6 +67,7 @@ public:
 	void reloadCooldown();
 	void isFinishAttack();
 	const bool getFaceRight();
+	void reset();
 	
 	// update and render
 	void update(float deltatime);

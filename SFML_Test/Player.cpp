@@ -225,6 +225,19 @@ const bool Player::getFaceRight()
 	return this->faceRight;
 }
 
+void Player::reset()
+{
+	// attack per time
+	this->attackCooldownMax = 5.f;
+	this->attackCooldown = this->attackCooldownMax;
+
+	// HP
+	this->hpMax = 100;
+	this->hp = this->hpMax;
+
+	body.setPosition(this->spawnPoint);
+}
+
 void Player::update(float deltatime)
 {
 	this->updateMovement(deltatime);
