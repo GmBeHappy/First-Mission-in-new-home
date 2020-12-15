@@ -25,9 +25,6 @@ private:
 	float attackCooldown;
 	float attackCooldownMax;
 
-	// Mouse
-	sf::Mouse* mouse;
-	
 	// Window
 	sf::RenderWindow* window;
 	
@@ -35,7 +32,6 @@ private:
 	unsigned int row;
 	float movementSpeed;
 	bool faceRight;
-	float suitPower=2000;
 	
 	/*private function*/
 	void initialBodyHitbox();
@@ -46,7 +42,7 @@ private:
 	
 
 public:
-	Player(sf::RenderWindow* window, sf::Texture* &texture, sf::Vector2u imageCount, float switchTime, float speed, sf::Mouse* mouse);
+	Player(sf::RenderWindow* window, sf::Texture* &texture, sf::Vector2u imageCount, float switchTime, float speed);
 	virtual ~Player();
 
 	// Access

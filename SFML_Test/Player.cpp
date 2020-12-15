@@ -108,7 +108,7 @@ void Player::updateMovement(float deltatime)
 	body.move(movement);
 }
 
-Player::Player(sf::RenderWindow* window,sf::Texture* &texture, sf::Vector2u imageCount, float switchTime, float speed, sf::Mouse* mouse): 
+Player::Player(sf::RenderWindow* window,sf::Texture* &texture, sf::Vector2u imageCount, float switchTime, float speed): 
 	animation(texture, imageCount, switchTime)
 {
 	this->movementSpeed = speed;
@@ -126,7 +126,6 @@ Player::Player(sf::RenderWindow* window,sf::Texture* &texture, sf::Vector2u imag
 	this->initialVariables();
 	
 	this->window = window;
-	this->mouse = mouse;
 
 }
 

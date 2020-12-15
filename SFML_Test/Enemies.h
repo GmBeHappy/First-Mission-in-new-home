@@ -2,17 +2,20 @@
 #include <SFML\Graphics.hpp>
 #include<SFML/System.hpp>
 #include<iostream>
+#include "EnemiesAnimatoin.h"
+
 class Enemies
 {
 private:
 
 	unsigned pointCount;
-	sf::CircleShape shape; // sprite
-
-	// ADD NEW TEXTURE & SPRITE --> Yellow Flappy
 	sf::Texture enemyTexture;
 	sf::RectangleShape  enemySprite;
+	EnemiesAnimatoin animation;
 
+	unsigned int row;
+	float movementSpeed;
+	bool faceRight=false;
 
 	int type;
 	int hp;
@@ -26,12 +29,11 @@ private:
 	int ability;
 
 	void initialVariables();
-	void initialTexture(sf::Texture*& texture);
 	void initialSprite();
 	
 
 public:
-	Enemies(float posX, float posY);
+	Enemies(float posX, float posY, sf::Texture*& texture, sf::Vector2u imageCount, float switchTime);
 
 	virtual ~Enemies();
 
@@ -46,7 +48,7 @@ public:
 	// functions
 
 
-	void update();
+	void update(float deltatime,sf::Vector2f player);
 	void render(sf::RenderTarget& target);
 };
 

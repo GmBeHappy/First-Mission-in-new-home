@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include<cstdlib>
 #include "Player.h"
 #include "Background.h"
 #include "MainMenu.h"
@@ -43,6 +44,12 @@ private:
 	std::vector<Bullet*> bullets;
 	sf::Texture* bulletTexture;
 
+	// Enemies
+	sf::Texture* enemyTexture;
+	float enemySpawnTimer;
+	float enemySpawnTimerMax;
+	std::vector<Enemies*> enemies;
+
 	// funtion
 	void initialWindow();
 	void initialPlayer();
@@ -54,6 +61,7 @@ private:
 	void initialMainMenu();
 	void initialMouse();
 	void initialBulletTexture();
+	void initialEnemies();
 
 public:
 	Game();
@@ -67,6 +75,7 @@ public:
 	void updateMousePosition();
 	void updateTimeScore();
 	void updateTime();
+	void updateEnemies();
 
 	void update();
 	void render();
