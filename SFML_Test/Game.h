@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include<cstdlib>
+#include <ctime>
 #include "Player.h"
 #include "Background.h"
 #include "MainMenu.h"
@@ -40,6 +41,13 @@ private:
 	MainMenu* mainMenu;
 	sf::Mouse* mouse;
 
+	// SCORE
+	int points;
+	int save_point;
+	int numShield = 3;
+	bool haveShield = false;
+	std::string playerName;
+
 	// Bullet
 	std::vector<Bullet*> bullets;
 	sf::Texture* bulletTexture;
@@ -76,6 +84,7 @@ public:
 	void updateTimeScore();
 	void updateTime();
 	void updateEnemies();
+	void updateCombat();
 
 	void update();
 	void render();

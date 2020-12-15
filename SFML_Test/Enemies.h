@@ -11,6 +11,7 @@ private:
 	unsigned pointCount;
 	sf::Texture enemyTexture;
 	sf::RectangleShape  enemySprite;
+	sf::RectangleShape  enemyHitbox;
 	EnemiesAnimatoin animation;
 
 	unsigned int row;
@@ -30,7 +31,7 @@ private:
 
 	void initialVariables();
 	void initialSprite();
-	
+	void updateHitbox();
 
 public:
 	Enemies(float posX, float posY, sf::Texture*& texture, sf::Vector2u imageCount, float switchTime);
@@ -47,7 +48,7 @@ public:
 
 	// functions
 
-
+	
 	void update(float deltatime,sf::Vector2f player);
 	void render(sf::RenderTarget& target);
 };

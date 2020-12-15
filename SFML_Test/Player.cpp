@@ -62,22 +62,22 @@ void Player::updateMovement(float deltatime)
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
 		if (body.getPosition().x > 0) {
-			movement.x -= 130 * deltatime;
+			movement.x -= 140 * deltatime;
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
 		if (body.getPosition().x < 7521) {
-			movement.x += 130 * deltatime;
+			movement.x += 140 * deltatime;
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
 		if (body.getPosition().y > 0) {
-			movement.y -= 130 * deltatime;
+			movement.y -= 140 * deltatime;
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
 		if (body.getPosition().y < 4234) {
-			movement.y += 130 * deltatime;
+			movement.y += 140 * deltatime;
 		}
 	}
 

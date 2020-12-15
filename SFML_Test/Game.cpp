@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <time.h>
 
 //setup game window default config
 void Game::initialWindow()
@@ -33,6 +34,7 @@ void Game::initialTime()
 {
 	this->time = new sf::Time;
 	this->clocktime = new sf::Clock;
+	srand(std::time(NULL));
 }
 
 void Game::initialFont()
@@ -187,16 +189,24 @@ void Game::updateEnemies()
 	this->enemySpawnTimer += 0.5f;
 	if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
 	{
+		
 		std::cout << "enemy spawn\n";
-		float enemyPosY = rand() % (int)this->player->GetPosition().y;
-		float enemyPosX = rand() % (int)this->player->GetPosition().x;
+		float enemyPosY = rand() % ((int)this->player->GetPosition().y)+600.0f;
+		float enemyPosX = rand() % ((int)this->player->GetPosition().x)+500.0f;
 		std::cout << "x : ";
 		std::cout << enemyPosX;
 		std::cout << "\t";
 		std::cout << "y : ";
 		std::cout << enemyPosY;
 		std::cout << "\n";
-		this->enemies.push_back(new Enemies(enemyPosY, enemyPosY + 100.f,this->enemyTexture,sf::Vector2u(3, 4), 0.3f));
+		std::cout << "player : ";
+		std::cout << "x : ";
+		std::cout << this->player->GetPosition().x;
+		std::cout << "\t";
+		std::cout << "y : ";
+		std::cout << this->player->GetPosition().y;
+		std::cout << "\n";
+		this->enemies.push_back(new Enemies(enemyPosY, enemyPosY ,this->enemyTexture,sf::Vector2u(3, 4), 0.3f));
 		this->enemySpawnTimer = 0.f;
 	}
 
@@ -207,13 +217,19 @@ void Game::updateEnemies()
 		enemie->update(deltaTime,this->player->GetPosition());
 
 		//// enemies culling (top screen)
-		//if (enemie->getBounds().left < this->window->getSize().y - 1700.f)
+		//if (enemie->getBounds().left < this->window->getSize().y)
 		//{
 		//	// delete enemies
 		//	std::cout << "enemy despawn\n";
 		//	delete this->enemies.at(Fcounter);
 		//	this->enemies.erase(this->enemies.begin() + Fcounter);
-
+		//}
+		//if (enemie->getBounds().left < this->window->getSize().x)
+		//{
+		//	// delete enemies
+		//	std::cout << "enemy despawn\n";
+		//	delete this->enemies.at(Fcounter);
+		//	this->enemies.erase(this->enemies.begin() + Fcounter);
 		//}
 
 		// Enemies & Player colission
@@ -240,6 +256,31 @@ void Game::updateEnemies()
 	}
 }
 
+void Game::updateCombat()
+{
+	for (int i = 0; i < this->enemies.size(); ++i)
+	{
+		bool enemy_removed = false;
+		this->enemies[i]->update(deltaTime,this->player->GetPosition());
+
+		for (size_t k = 0; k < this->bullets.size() && !enemy_removed; k++) // has been shot
+		{
+			if (this->bullets[k]->getBounds().intersects(this->enemies[i]->getBounds())) // IF bullet touch the enemies
+			{
+				std::cout << "killed\n";
+				std::cout << this->points;
+				std::cout << "\n";
+				this->points += this->enemies[i]->getPoints();
+
+				this->bullets.erase(this->bullets.begin() + k);
+				this->enemies.erase(this->enemies.begin() + i);
+
+				enemy_removed = true;
+			}
+		}
+	}
+}
+
 void Game::update()
 {	
 	
@@ -251,6 +292,7 @@ void Game::update()
 		this->updateEnemies();
 		this->updateTimeScore();
 		this->updateTime();
+		this->updateCombat();
 	}
 	else {
 		this->mainMenu->update();
