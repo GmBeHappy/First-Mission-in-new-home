@@ -81,7 +81,7 @@ void Game::initialGUI()
 	this->restart->setPosition(sf::Vector2f(0.0f, 0.0f));
 	this->restart->setCharacterSize(60);
 	this->restart->setFont(*this->font);
-	this->restart->setString("press space to restart");
+	this->restart->setString("press R to restart");
 
 	this->restartHitbox.setSize(sf::Vector2f(180.0f, 50.0f));
 	this->restartHitbox.setOutlineColor(sf::Color::Red);
@@ -92,7 +92,7 @@ void Game::initialGUI()
 	this->backToMenu->setPosition(sf::Vector2f(0.0f, 0.0f));
 	this->backToMenu->setCharacterSize(60);
 	this->backToMenu->setFont(*this->font);
-	this->backToMenu->setString("press esc to exit");
+	this->backToMenu->setString("press Enter to exit");
 }
 
 void Game::initialMainMenu()
@@ -194,6 +194,26 @@ void Game::updatePollEvents()
 			this->player->finishAttack();
 			printf("Shooted\n");
 			
+		}
+
+		if (event.type == sf::Event::TextEntered && !this->mainMenu->isFinishNameInput) {
+			switch (event.key.code) {
+			case 8:
+				if (playerName.size() == 0) {
+					break;
+				}
+				playerName.pop_back();
+				this->mainMenu->nameInput->setString(playerName);
+				break;
+			case 13:
+				this->mainMenu->isFinishNameInput = true;
+				this->mainMenu->isPlay = true;
+
+			default:
+				playerName += event.text.unicode;
+				// play sound
+				this->mainMenu->nameInput->setString(playerName);
+			}
 		}
 	}
 }
@@ -369,7 +389,7 @@ void Game::updateEndGame()
 void Game::updateEnding()
 
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
 		this->player->reset();
 		this->points = 0;
 		this->initialTime();
@@ -377,6 +397,7 @@ void Game::updateEnding()
 		this->clearAllEnemies();
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+		updateAndSaveScore(this->playerName, this->points, this->showtime);
 		this->player->reset();
 		this->clearAllEnemies();
 		this->points = 0;
@@ -391,12 +412,76 @@ void Game::updateEnding()
 
 }
 
+void Game::updateAndSaveScore(std::string playerName, int score , int time)
+{
+	typedef struct NameWithScore {
+		std::string name;
+		int score;
+	} NameWithScore;
+
+	auto compareScores = [](NameWithScore p_1, NameWithScore p_2) {
+		return p_1.score > p_2.score;
+	};
+
+	std::vector<NameWithScore> namesWithScore;
+
+	NameWithScore currentPlayer;
+	currentPlayer.name = playerName;
+	currentPlayer.score = score;
+
+	namesWithScore.push_back(currentPlayer);
+
+	std::ifstream ifs("score/score.txt");
+
+	if (ifs.is_open())
+	{
+		std::string playerName1 = "";
+		std::string playerScore = "";
+
+		while (ifs >> playerName1 >> playerScore )
+		{
+
+			std::cout << playerName1 << std::endl << playerScore << std::endl;
+			NameWithScore temp;
+			temp.name = playerName1;
+			temp.score = std::stoi(playerScore);
+			namesWithScore.push_back(temp);
+		}
+
+
+	}
+
+	ifs.close();
+
+	std::sort(namesWithScore.begin(), namesWithScore.end(), compareScores);
+
+	while (namesWithScore.size() > 5) {
+		namesWithScore.pop_back();
+	}
+
+	std::fstream ofs;
+
+	ofs.open("score/score.txt", std::ios::out | std::ios::trunc);
+
+	for (auto nameWithScore : namesWithScore) {
+		std::cout << "write " << nameWithScore.name << std::endl << nameWithScore.score << std::endl;
+
+		ofs << nameWithScore.name + "\t" + std::to_string(nameWithScore.score) + "\n";
+	}
+
+	ofs.close();
+}
+
+void Game::updateNameInput()
+{
+	
+}
+
 void Game::update()
 {	
 	
 	this->updatePollEvents();
-	if (this->mainMenu->isPlay && !this->isEnding) {
-		
+	if (this->mainMenu->isPlay && !this->isEnding && this->mainMenu->isFinishNameInput) {
 		this->player->update(deltaTime);
 		this->view->setCenter(this->player->GetPosition());
 		this->updateBullets();
@@ -407,11 +492,12 @@ void Game::update()
 		this->updateGUI();
 		this->updateEndGame();
 	}
-	else  if (this->isEnding) {
+	else if (this->isEnding) {
 		this->updateEnding();
 	}
 	else {
 		//std::cout << "ex";
+
 		this->mainMenu->update();
 	}
 	
@@ -422,7 +508,7 @@ void Game::render()
 	this->window->clear();
 	
 	// draw game
-	if (this->mainMenu->isPlay && !this->isEnding) {
+	if (this->mainMenu->isPlay && !this->isEnding && this->mainMenu->isFinishNameInput) {
 		this->window->setView(*this->view);
 		this->background->render(*this->window);
 		this->window->draw(*this->playTime);
@@ -466,6 +552,7 @@ void Game::render()
 	else { // draw main menu
 		//std::cout << "memu";
 		//this->window->setView(*this->view);
+
 		this->mainMenu->render();
 	}
 	this->window->display();

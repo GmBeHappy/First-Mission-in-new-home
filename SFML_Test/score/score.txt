@@ -1,0 +1,5 @@
+test333	1900
+test2	950
+gmm	700
+Gm	100
+test333	0

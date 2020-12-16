@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
-#include<cstdlib>
+#include <cstdlib>
 #include <ctime>
+#include <sstream>
+#include <fstream>
 #include "Player.h"
 #include "Background.h"
 #include "MainMenu.h"
@@ -20,6 +22,9 @@ private:
 	Player* player;
 	sf::RectangleShape playerHpBar;			//MAX
 	sf::RectangleShape playerHpBarBack;		// 
+
+	std::string playerName = "";
+	bool isTypeName = false;
 	
 	// Background
 	sf::Texture* gameBackgroung;
@@ -43,7 +48,7 @@ private:
 	sf::Clock* clock;
 	sf::Clock* clocktime;
 	sf::Time* time;
-	unsigned long long showtime;
+	unsigned int showtime;
 
 	// Menu
 	MainMenu* mainMenu;
@@ -55,7 +60,6 @@ private:
 	int save_point;
 	int numShield = 3;
 	bool haveShield = false;
-	std::string playerName;
 
 	// Bullet
 	std::vector<Bullet*> bullets;
@@ -98,6 +102,9 @@ public:
 	void updateGUI();
 	void updateEndGame();
 	void updateEnding();
+	void updateAndSaveScore(std::string playerName, int score, int time);
+
+	void updateNameInput();
 
 	void update();
 	void render();
