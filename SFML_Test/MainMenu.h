@@ -26,6 +26,9 @@ private:
 	sf::RectangleShape shape;
 	sf::Text* header;
 	sf::Text* content;
+
+	sf::Texture* howtoTexture;
+	sf::Sprite* sprite;
 	
 
 	void initialTexture();
@@ -33,6 +36,7 @@ private:
 	void initialText();
 	void initialNameInput();
 	void initialReadScore();
+	void initialHowto();
 
 public:
 	MainMenu(sf::RenderWindow* window, sf::Mouse* mouse);
@@ -42,6 +46,7 @@ public:
 	bool isNameInput = false;
 	bool isFinishNameInput = false;
 	bool toggleLeaderboard = false;
+	bool toggleHowTo = false;
 	void update();
 	void render();
 };

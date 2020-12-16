@@ -1,6 +1,7 @@
 
-#include<SFML/Graphics.hpp>
-#include<SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Audio.hpp>
 #include "Animation.h"
 #include <iostream>
 #include <map>

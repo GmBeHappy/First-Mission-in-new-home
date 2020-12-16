@@ -55,6 +55,22 @@ private:
 	sf::Mouse* mouse;
 	bool isEnding = false;
 
+	// SOUND hit
+	sf::SoundBuffer bufferHit;
+	sf::Sound hitSound;
+
+	// BG music
+	sf::Music music;
+	sf::Music menuMusic;
+
+	// Take damage
+	sf::SoundBuffer buffHurt;
+	sf::Sound soundHurt;
+
+	// game over haha
+	sf::SoundBuffer bufflol;
+	sf::Sound haha;
+
 	// SCORE
 	int points;
 	int save_point;
@@ -83,6 +99,8 @@ private:
 	void initialMouse();
 	void initialBulletTexture();
 	void initialEnemies();
+	void initialBGSound();
+	void initialSound();
 
 	void clearAllEnemies();
 

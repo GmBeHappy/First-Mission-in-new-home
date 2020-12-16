@@ -109,6 +109,15 @@ void MainMenu::initialReadScore()
 	ifs.close();
 }
 
+void MainMenu::initialHowto()
+{
+	this->howtoTexture = new sf::Texture;
+	this->howtoTexture->loadFromFile("Textures/how_to_mini.jpg");
+	this->sprite = new sf::Sprite;
+	this->sprite->setTexture(*this->howtoTexture);
+	this->sprite->setPosition(sf::Vector2f(1000.0f, 250.0f));
+}
+
 
 
 
@@ -120,6 +129,7 @@ MainMenu::MainMenu(sf::RenderWindow* window,sf::Mouse* mouse)
 	this->initialText();
 	this->initialNameInput();
 	this->initialReadScore();
+	this->initialHowto();
 	this->window = window;
 	this->mouse = mouse;
 }
@@ -135,6 +145,7 @@ void MainMenu::update()
 		if (this->mouse->isButtonPressed(this->mouse->Left)) {
 			this->isNameInput = true;
 			this->toggleLeaderboard = false;
+			this->toggleHowTo = false;
 		}
 	}
 	else if(this->scoreBtn->getGlobalBounds().contains(this->mouse->getPosition(*this->window).x, this->mouse->getPosition(*this->window).y))
@@ -143,6 +154,7 @@ void MainMenu::update()
 		if (this->mouse->isButtonPressed(this->mouse->Left)) {
 			this->toggleLeaderboard = true;
 			this->isNameInput = false;
+			this->toggleHowTo = false;
 		}
 	}
 	else if (this->howtoBtn->getGlobalBounds().contains(this->mouse->getPosition(*this->window).x, this->mouse->getPosition(*this->window).y))
@@ -150,6 +162,8 @@ void MainMenu::update()
 		this->howtoBtn->setCharacterSize(80);
 		if (this->mouse->isButtonPressed(this->mouse->Left)) {
 			this->toggleLeaderboard = false;
+			this->toggleHowTo = true;
+			this->isNameInput = false;
 		}
 	}
 	else if (this->exitBtn->getGlobalBounds().contains(this->mouse->getPosition(*this->window).x, this->mouse->getPosition(*this->window).y))
@@ -181,5 +195,8 @@ void MainMenu::render()
 		this->window->draw(this->shape);
 		this->window->draw(*this->header);
 		this->window->draw(*this->content);
+	}
+	if (this->toggleHowTo) {
+		this->window->draw(*this->sprite);
 	}
 }

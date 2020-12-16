@@ -120,6 +120,31 @@ void Game::initialEnemies()
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 }
 
+void Game::initialBGSound()
+{
+	if (!this->music.openFromFile("Sound/DeepSpaceB_01.ogg"))
+	{
+		std::cout << "ERROR::GAME::COLD NOT LOAD - cuphead - SOUND" << "\n";
+	}
+	// initial bg sound
+	this->music.play();
+	this->music.setVolume(50.f);
+	this->music.setLoop(true);
+}
+
+void Game::initialSound()
+{
+	if (!this->bufferHit.loadFromFile("Sound/Laser_Shoot11.wav"))
+	{
+		std::cout << "ERROR::GAME::COLD NOT LOAD - pop - SOUND" << "\n";
+	}
+	// initial pew sound
+	this->hitSound.setBuffer(this->bufferHit);
+
+	this->hitSound.play();
+	this->hitSound.setVolume(80.f);
+}
+
 void Game::clearAllEnemies()
 {
 	for (auto& enem : this->enemies)
@@ -144,6 +169,7 @@ Game::Game(){
 	this->initialMouse();
 	this->initialBulletTexture();
 	this->initialEnemies();
+	this->initialBGSound();
 }
 
 Game::~Game()
@@ -193,7 +219,7 @@ void Game::updatePollEvents()
 			
 			this->player->finishAttack();
 			printf("Shooted\n");
-			
+			this->initialSound();
 		}
 
 		if (event.type == sf::Event::TextEntered && !this->mainMenu->isFinishNameInput) {
